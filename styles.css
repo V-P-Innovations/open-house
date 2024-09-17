@@ -1,45 +1,143 @@
+/* Variáveis de cores para fácil manutenção */
+:root {
+    --primary-color: #2563EB;  
+    --secondary-color: #1E3A8A;  
+    --background-color: #EFF6FF;  
+    --input-border-color: #93C5FD;  
+    --white: #FFFFFF;
+    --box-shadow: rgba(0, 0, 0, 0.1);
+    --box-shadow-hover: rgba(0, 0, 0, 0.15);
+}
+
+/* Estilos Globais */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
     padding: 20px;
+    color: var(--secondary-color);
 }
 
-h1, h2 {
+h1 {
     text-align: center;
+    color: var(--secondary-color);
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
 }
 
-#masterSection, #userSection {
+h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    border-bottom: 2px solid var(--primary-color);
+    padding-bottom: 10px;
     margin-bottom: 20px;
-    text-align: center;
 }
 
+/* Estilizando os campos de texto */
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid var(--input-border-color);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input[type="text"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 8px rgba(37, 99, 235, 0.3); 
+    outline: none;
+}
+
+/* Estilo dos botões */
+button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0 4px 6px var(--box-shadow);
+}
+
+button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+/* Estilo dos itens da lista */
 ul {
     list-style-type: none;
     padding: 0;
 }
 
 li {
-    margin: 10px 0;
+    background-color: var(--white);
+    padding: 20px;
+    margin-bottom: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px var(--box-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
 }
 
-input[type="checkbox"]:disabled + label {
-    text-decoration: line-through;
-    color: gray;
+li:hover {
+    transform: scale(1.02);
 }
 
-input, button {
-    padding: 10px;
-    margin: 5px;
+label {
+    margin-left: 15px;
+    flex: 1;
+    font-size: 1.1rem;
+    color: var(--secondary-color);
 }
 
-button {
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
+/* Estilo do checkbox */
+input[type="checkbox"] {
+    transform: scale(1.5);
+    accent-color: var(--primary-color);
 }
 
-button:hover {
-    background-color: #0056b3;
+/* Seções */
+#masterSection, #userSection {
+    margin-bottom: 40px;
+    background-color: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 16px var(--box-shadow);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: box-shadow 0.3s ease;
+}
+
+#masterSection:hover, #userSection:hover {
+    box-shadow: 0 12px 24px var(--box-shadow-hover);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+
+    input[type="text"], button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    input[type="checkbox"] {
+        margin-bottom: 10px;
+    }
 }

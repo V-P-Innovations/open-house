@@ -3,55 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Chá de Casa Nova</title>
+    <title>Chá de Casa Nova</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Lista de Chá de Casa Nova</h1>
+    <h1>Chá de Casa Nova</h1>
     
-    <!-- Formulário para o usuário master adicionar itens -->
     <div id="masterSection">
         <h2>Adicionar Item à Lista</h2>
         <input type="text" id="newItem" placeholder="Nome do item" />
-        <button onclick="addItem()">Adicionar</button>
+        <button id="addItemButton" onclick="addItem()">Adicionar</button>
+        <p id="addItemFeedback" class="feedback"></p> 
     </div>
 
-    <!-- Campo para o usuário padrão colocar o nome -->
     <div id="userSection">
         <h2>Marque um Item</h2>
         <input type="text" id="userName" placeholder="Seu nome" />
         <ul id="giftList"></ul>
+        <p id="userFeedback" class="feedback"></p> 
     </div>
 
     <script>
-        // Função para adicionar um item
         async function addItem() {
             const newItem = document.getElementById('newItem').value;
-            if (!newItem) return;
+            const feedback = document.getElementById('addItemFeedback');
+            if (!newItem) {
+                feedback.textContent = 'Por favor, insira o nome do item.';
+                feedback.style.color = 'red';
+                return;
+            }
 
-            const response = await fetch('http://localhost:3000/add-item', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: newItem })
-            });
-            
-            const data = await response.json();
-            document.getElementById('newItem').value = ''; // Limpa o campo
-            fetchItems(); // Atualiza a lista
+            try {
+                const response = await fetch('http://localhost:3000/add-item', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: newItem })
+                });
+
+                if (!response.ok) throw new Error('Erro ao adicionar o item.');
+
+                const data = await response.json();
+                document.getElementById('newItem').value = ''; 
+                feedback.textContent = 'Item adicionado com sucesso!';
+                feedback.style.color = 'green';
+
+                fetchItems(); 
+            } catch (error) {
+                feedback.textContent = 'Falha ao adicionar o item.';
+                feedback.style.color = 'red';
+            }
         }
 
-        // Função para buscar todos os itens
         async function fetchItems() {
-            const response = await fetch('http://localhost:3000/items');
-            const items = await response.json();
-            renderItems(items);
+            try {
+                const response = await fetch('http://localhost:3000/items');
+                if (!response.ok) throw new Error('Erro ao buscar itens.');
+                
+                const items = await response.json();
+                renderItems(items);
+            } catch (error) {
+                document.getElementById('userFeedback').textContent = 'Erro ao carregar a lista de presentes.';
+            }
         }
 
-        // Renderiza a lista de itens no front-end
         function renderItems(items) {
             const giftList = document.getElementById('giftList');
-            giftList.innerHTML = ''; // Limpa a lista antes de renderizar
-
+            giftList.innerHTML = ''; 
             items.forEach(item => {
                 const li = document.createElement('li');
 
@@ -72,24 +89,33 @@
             });
         }
 
-        // Função para selecionar um item
         async function selectItem(id) {
             const userName = document.getElementById('userName').value;
+            const userFeedback = document.getElementById('userFeedback');
             if (!userName) {
-                alert('Por favor, insira seu nome antes de escolher um item.');
+                userFeedback.textContent = 'Por favor, insira seu nome antes de escolher um item.';
+                userFeedback.style.color = 'red';
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/select-item', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id, selectedBy: userName })
-            });
+            try {
+                const response = await fetch('http://localhost:3000/select-item', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, selectedBy: userName })
+                });
 
-            fetchItems(); // Atualiza a lista após a seleção
+                if (!response.ok) throw new Error('Erro ao selecionar o item.');
+
+                fetchItems(); 
+                userFeedback.textContent = 'Item selecionado com sucesso!';
+                userFeedback.style.color = 'green';
+            } catch (error) {
+                userFeedback.textContent = 'Falha ao selecionar o item.';
+                userFeedback.style.color = 'red';
+            }
         }
 
-        // Carregar os itens ao carregar a página
         document.addEventListener('DOMContentLoaded', fetchItems);
     </script>
 </body>

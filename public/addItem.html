@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Itens</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Adicionar Itens</h1>
+    <input type="text" id="newItem" placeholder="Nome do item" />
+    <button id="addItemButton" onclick="addItem()">Adicionar</button>
+    <p id="feedback" class="feedback"></p>
+
+    <script>
+        async function addItem() {
+            const newItem = document.getElementById('newItem').value;
+            const feedback = document.getElementById('feedback');
+    
+            if (!newItem) {
+                feedback.textContent = 'Por favor, insira o nome do item.';
+                feedback.style.color = 'red';
+                return;
+            }
+    
+            try {
+                const response = await fetch('/add-item', { // Atualize para /add-item
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({ name: newItem })
+                });
+                console.log('Token:', localStorage.getItem('token'));
+                
+                if (!response.ok) {
+                    throw new Error('Erro na resposta da rede');
+                }
+    
+                const data = await response.json();
+                feedback.textContent = 'Item adicionado com sucesso!';
+                feedback.style.color = 'green';
+            } catch (err) {
+                feedback.textContent = 'Erro ao adicionar o item: ' + err.message;
+                feedback.style.color = 'red';
+            }
+        }
+    </script>
+    
+</body>
+</html>

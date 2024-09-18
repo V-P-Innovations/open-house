@@ -1,20 +1,13 @@
 {
-  "name": "open-house",
-  "version": "1.0.0",
-  "description": "Este é um projeto para gerenciar uma lista de chá de casa nova usando Fastify para o servidor back-end e PostgreSQL para o banco de dados. O sistema permite que um usuário master adicione itens à lista e que usuários padrão marquem os itens como escolhidos.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@fastify/cors": "^9.0.1",
-    "fastify": "^4.28.1",
-    "fastify-cors": "^6.1.0",
-    "fastify-postgres": "^3.7.0",
-    "pg": "^8.12.0"
+    "@fastify/cors": "^10.0.0",
+    "@fastify/jwt": "^9.0.0",
+    "@fastify/postgres": "^6.0.0",
+    "@fastify/static": "^8.0.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "fastify": "^5.0.0",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2"
   }
 }

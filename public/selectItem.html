@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escolher Itens</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Escolher Itens</h1>
+    <div id="itemsList"></div>
+    <p id="feedback" class="feedback"></p>
+
+    <script>
+        async function loadItems() {
+            try {
+                const response = await fetch('/items', {
+                    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('token') }
+                });
+                const items = await response.json();
+                const itemsList = document.getElementById('itemsList');
+                itemsList.innerHTML = items.map(item => 
+                    `<div>
+                        <span>${item.name}</span>
+                        <button onclick="selectItem(${item.id})">Selecionar</button>
+                    </div>`
+                ).join('');
+            } catch (err) {
+                document.getElementById('feedback').textContent = 'Erro ao carregar itens.';
+            }
+        }
+
+        async function selectItem(id) {
+            const selectedBy = prompt('Insira o nome para selecionar este item:');
+
+            if (!selectedBy) {
+                alert('Por favor, insira o nome.');
+                return;
+            }
+
+            try {
+                const response = await fetch('/select-item', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('token')
+                    },
+                    body: JSON.stringify({ id, selectedBy })
+                });
+
+                if (response.ok) {
+                    alert('Item selecionado com sucesso!');
+                    loadItems(); // Atualiza a lista de itens
+                } else {
+                    alert('Erro ao selecionar item.');
+                }
+            } catch (err) {
+                alert('Erro ao selecionar item.');
+            }
+        }
+
+        loadItems(); // Carrega a lista ao iniciar a página
+    </script>
+</body>
+</html>
